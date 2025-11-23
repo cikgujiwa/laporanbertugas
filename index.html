@@ -1,125 +1,113 @@
 <!doctype html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Laporan Minggu Bertugas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --accent:#0b61d6;
-      --muted:#6b7280;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    body{margin:0;background:var(--bg);padding:28px;}
-    .container{max-width:980px;margin:0 auto;}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-    h1{margin:0;font-size:20px;color:#0b2340;}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
-    .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(11,34,64,0.06);}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
-    input[type="text"], input[type="date"], textarea, select{
-      width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;font-size:14px;
-      box-sizing:border-box;
-    }
-    textarea{min-height:86px;resize:vertical;}
-    .actions{display:flex;gap:10px;margin-top:12px;}
-    button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600;}
-    .btn-primary{background:var(--accent);color:white;}
-    .btn-outline{background:white;border:1px solid #cbd5e1;color:var(--accent);}
-    .preview-wrapper{margin-top:18px;}
-    /* Laporan (PDF) styling */
-    #report{background:white;padding:22px;border-radius:6px;max-width:800px;margin:0 auto;color:#111;box-shadow:0 8px 30px rgba(11,34,64,0.06);}
-    #report h2{margin:0 0 6px 0;text-align:center;font-size:18px;}
-    #report .meta{display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px;color:var(--muted);}
-    #report section{margin-bottom:10px;padding-top:6px;border-top:1px dashed #eee;}
-    .section-title{font-weight:700;margin-bottom:6px;}
-    .names-list{white-space:pre-line;}
-    @media print{
-      body{background:white;}
-      .no-print{display:none;}
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Laporan Minggu Bertugas — Borang Isi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--accent:#0b61d6;--muted:#6b7280;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+  body{margin:0;background:var(--bg);padding:22px;}
+  .container{max-width:980px;margin:0 auto;}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  h1{margin:0;font-size:20px;color:#0b2340;}
+  .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(11,34,64,0.06);}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  input[type="text"], input[type="date"], textarea, select{
+    width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;font-size:14px;box-sizing:border-box;
+  }
+  textarea{min-height:80px;resize:vertical;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .actions{display:flex;gap:10px;margin-top:12px;}
+  button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600;}
+  .btn-primary{background:var(--accent);color:white;}
+  .btn-outline{background:white;border:1px solid #cbd5e1;color:var(--accent);}
+  .note{color:var(--muted);font-size:13px;margin-top:8px;}
+
+  /* PREVIEW (paper-like A4) */
+  .preview-wrap{margin-top:18px;display:flex;justify-content:center;}
+  #report{background:white;padding:22px;border-radius:6px;width:794px; /* A4 px @96dpi ~ 794x1123 */ color:#111;box-shadow:0 8px 30px rgba(11,34,64,0.06);}
+  #report h2{text-align:center;margin:0 0 8px 0;}
+  .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px;}
+  section{margin-top:8px;border-top:1px dashed #eee;padding-top:8px;}
+  .section-title{font-weight:700;margin-bottom:6px;}
+  .names-list{white-space:pre-line;}
+
+  /* Optional overlay mode: place inputs on top of image-like layout (for manual fine-tune) */
+  .overlay-frame{position:relative;width:794px;height:1123px;margin:14px auto;border:1px solid #eee;background:white;overflow:hidden;}
+  .pdf-ref{position:absolute;inset:0;opacity:0.12;pointer-events:none;background:#fff url('/mnt/data/Laporan Bertugas MINGGU 2.pdf') center/cover no-repeat;}
+  /* If browser can't use PDF as background you'll still see faint area; we show the link above. */
+
+  /* Example positioned input (tweak top/left/width as needed) */
+  .abs-input{position:absolute;padding:6px;border:1px dashed rgba(11,34,64,0.12);background:rgba(255,255,255,0.9);border-radius:4px;font-size:13px;}
+  /* sample positions (adjust in CSS below if you want pixel-perfect) */
+  #abs-school{top:60px;left:80px;width:580px;height:26px;}
+  #abs-week{top:100px;left:80px;width:180px;height:26px;}
+  #abs-date{top:100px;left:420px;width:240px;height:26px;}
+  #abs-day{top:140px;left:80px;width:200px;height:26px;}
+  #abs-names{top:180px;left:80px;width:580px;height:60px;}
+  #abs-assembly{top:260px;left:42px;width:710px;height:220px;}
+  #abs-activities{top:500px;left:42px;width:710px;height:220px;}
+
+  @media print{.no-print{display:none}}
+</style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Laporan Minggu Bertugas</h1>
+      <h1>Laporan Minggu Bertugas — Borang Isi</h1>
       <div style="text-align:right;color:var(--muted);font-size:13px;">
-        Contoh PDF sumber: <a href="/mnt/data/Laporan Bertugas MINGGU 2.pdf" target="_blank">Laporan Bertugas MINGGU 2.pdf</a>
+        Contoh PDF: <a href="/mnt/data/Laporan Bertugas MINGGU 2.pdf" target="_blank">Laporan Bertugas MINGGU 2.pdf</a>
       </div>
     </header>
 
     <div class="card no-print">
-      <div class="form-grid">
+      <div class="grid">
         <div>
           <label>Sekolah</label>
-          <input id="school" type="text" value="SK SATU SULTAN ALAM SHAH">
+          <input id="school" type="text" placeholder="Isi nama sekolah">
         </div>
         <div>
           <label>Minggu</label>
-          <input id="week" type="text" value="MINGGU 2">
+          <input id="week" type="text" placeholder="contoh: MINGGU 2">
         </div>
         <div>
           <label>Tarikh</label>
-          <input id="date" type="date" value="2025-02-28">
+          <input id="date" type="date">
         </div>
         <div>
           <label>Hari</label>
-          <input id="day" type="text" value="JUMAAT">
+          <input id="day" type="text" placeholder="contoh: JUMAAT">
         </div>
         <div style="grid-column:1/3;">
           <label>Nama Guru Bertugas (pisahkan dengan koma)</label>
-          <input id="names" type="text" value="SAL SABILA, AJRINA, AFIQAH, ZULHANIF, AINA, FAHIMAH, PURU, INTAN">
+          <input id="names" type="text" placeholder="Contoh: SAL SABILA, AJRINA, AFIQAH">
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
         <div>
-          <label>Perhimpunan Pagi (masukkan tajuk dan isi)</label>
-          <textarea id="assembly">1. Bacaan Yasin
-Perhimpunan dimulakan dengan bacaan Yasin yang dipimpin oleh [Nama Guru/Ustaz].
-Semua murid dan guru mengambil bahagian dengan penuh khusyuk bagi memperoleh keberkatan dan kesejahteraan.
-Murid diingatkan untuk terus mengamalkan bacaan Yasin dan doa dalam kehidupan seharian.
-2. Tazkirah Ihya Ramadan
-Sebagai persediaan menyambut Ramadan, satu tazkirah bertemakan "Keistimewaan Ramadan dan Amalan yang Diberkati" telah disampaikan oleh [Nama Penceramah/Guru].
-Murid diingatkan tentang kepentingan niat puasa, menjaga akhlak, memperbanyakkan ibadah serta menghormati bulan yang mulia ini.
-Murid digalakkan untuk membaca al-Quran, bersedekah, dan membantu rakan-rakan serta guru dalam kebaikan.
-3. Disiplin dan Kebersihan
-Murid diingatkan untuk menjaga kebersihan kelas dan kawasan sekolah terutama dalam bulan Ramadan.
-Murid diminta untuk tidak bermain kasar atau membazir makanan ketika berbuka dan bersahur.
-Pakaian murid juga perlu kemas dan mematuhi peraturan sekolah.
-4. Penutup
-Murid diingatkan untuk meneruskan amalan baik sepanjang Ramadan dan menghormati mereka yang berpuasa.
-Perhimpunan diakhiri dengan doa dan selawat ke atas Nabi Muhammad SAW.</textarea>
+          <label>Perhimpunan Pagi</label>
+          <textarea id="assembly" placeholder="Isi perhimpunan / tazkirah / catatan"></textarea>
         </div>
         <div>
           <label>Aktiviti / Program & Catatan Disiplin</label>
-          <textarea id="activities">AKTIVITI / PROGRAM TAZKIRAH AWAL RAMADAN
-
-DISIPLIN PELAJAR CEMERLANG
-KELAS KEMAS DAN TERATUR
-KANTIN MURID BERATUR SEMASA MEMBELI MAKANAN
-SURAU KEMAS
-PINTU PAGAR MURID MEMBERI SALAM DAN SENYUM
-LAWATAN TIADA</textarea>
+          <textarea id="activities" placeholder="Isi aktiviti / catatan"></textarea>
         </div>
       </div>
 
       <div class="actions">
         <button class="btn-primary" id="previewBtn">Preview Laporan</button>
         <button class="btn-outline" id="downloadBtn">Download PDF</button>
-        <button style="margin-left:auto;" id="loadExample">Isi Dari Contoh PDF</button>
+        <button id="showOverlay" style="margin-left:auto;">Tunjuk Overlay (Sesuaikan)</button>
       </div>
-      <p style="margin-top:8px;color:var(--muted);font-size:13px;">Nota: Gunakan butang "Isi Dari Contoh PDF" untuk mengisi teks contoh yang bersesuaian.</p>
+      <div class="note">Nota: Jika anda perlukan ketepatan posisi persis pada PDF contoh, gunakan mode <strong>Overlay</strong> — kemudian saya boleh bantu laraskan posisi input (top/left) berdasarkan maklum balas anda.</div>
     </div>
 
-    <div class="preview-wrapper">
+    <!-- PREVIEW (rendered report that will be exported to PDF) -->
+    <div class="preview-wrap">
       <div id="report" class="card" aria-live="polite">
-        <!-- Laporan akan dijana di sini -->
-        <h2 id="report-school">Sekolah</h2>
+        <h2 id="report-school">SEKOLAH</h2>
         <div class="meta">
           <div id="report-week">Minggu</div>
           <div id="report-date">Tarikh</div>
@@ -148,81 +136,107 @@ LAWATAN TIADA</textarea>
         </footer>
       </div>
     </div>
+
+    <!-- OVERLAY FRAME (optional: pindah input tepat atas layout) -->
+    <div style="text-align:center;margin-top:12px;" id="overlayContainer" class="no-print" hidden>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:8px;">Mode Overlay: seret/ubah saiz tidak disokong — gunakan CSS untuk melaraskan kedudukan tepat jika perlu.</p>
+      <div class="overlay-frame card">
+        <!-- Visual low-opacity PDF reference (browser may not preview PDF as background, but link above still works) -->
+        <div class="pdf-ref"></div>
+
+        <!-- ABS positioned inputs (ubah kedudukan dalam CSS di atas untuk precision) -->
+        <input id="abs-school" class="abs-input" type="text" placeholder="Sekolah (posisi)">
+        <input id="abs-week" class="abs-input" type="text" placeholder="Minggu">
+        <input id="abs-date" class="abs-input" type="text" placeholder="Tarikh">
+        <input id="abs-day" class="abs-input" type="text" placeholder="Hari">
+        <textarea id="abs-names" class="abs-input" placeholder="Nama Guru (baris baru dipisah)"></textarea>
+        <textarea id="abs-assembly" class="abs-input" placeholder="Perhimpunan Pagi"></textarea>
+        <textarea id="abs-activities" class="abs-input" placeholder="Aktiviti / Program"></textarea>
+      </div>
+    </div>
+
   </div>
 
   <!-- html2pdf CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
   <script>
     // Fill report from form
-    function fillReport(){
-      document.getElementById('report-school').textContent = document.getElementById('school').value || 'Sekolah';
-      document.getElementById('report-week').textContent = document.getElementById('week').value || '';
+    function fillReportFromMain(){
+      document.getElementById('report-school').textContent = (document.getElementById('school').value || 'SEKOLAH').toUpperCase();
+      document.getElementById('report-week').textContent = (document.getElementById('week').value || '');
       const dateVal = document.getElementById('date').value;
       const dateFmt = dateVal ? new Date(dateVal).toLocaleDateString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
       document.getElementById('report-date').textContent = dateFmt;
       document.getElementById('report-day').textContent = document.getElementById('day').value || '';
-      // names to line separated
       const names = document.getElementById('names').value || '';
       document.getElementById('report-names').textContent = names.split(',').map(s=>s.trim()).join('\\n');
       document.getElementById('report-assembly').textContent = document.getElementById('assembly').value || '';
       document.getElementById('report-activities').textContent = document.getElementById('activities').value || '';
     }
 
-    document.getElementById('previewBtn').addEventListener('click', function(e){
-      fillReport();
-      // scroll to preview
+    document.getElementById('previewBtn').addEventListener('click', function(){
+      fillReportFromMain();
       document.getElementById('report').scrollIntoView({behavior:'smooth'});
     });
 
-    // PDF download
+    // Download PDF
     document.getElementById('downloadBtn').addEventListener('click', function(){
-      fillReport();
+      fillReportFromMain();
       const element = document.getElementById('report');
-
-      // html2pdf options tuned for A4 portrait
       const opt = {
-        margin:       [0.4, 0.4, 0.4, 0.4], // inches
+        margin:       [0.4,0.4,0.4,0.4],
         filename:     (document.getElementById('school').value || 'laporan') + '_' + (document.getElementById('week').value || '') + '.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
       };
-
-      // generate pdf
       html2pdf().set(opt).from(element).save();
     });
 
-    // Load example from uploaded PDF's parsed content (basic fill)
-    document.getElementById('loadExample').addEventListener('click', function(){
-      // Isi contoh berdasar PDF yang anda muat naik
-      document.getElementById('school').value = 'SK SATU SULTAN ALAM SHAH';
-      document.getElementById('week').value = 'MINGGU 2';
-      document.getElementById('date').value = '2025-02-28';
-      document.getElementById('day').value = 'JUMAAT';
-      document.getElementById('names').value = 'SAL SABILA, AJRINA, AFIQAH, ZULHANIF, AINA, FAHIMAH, PURU, INTAN';
-
-      document.getElementById('assembly').value = `1. Bacaan Yasin
-Perhimpunan dimulakan dengan bacaan Yasin yang dipimpin oleh [Nama Guru/Ustaz].
-Semua murid dan guru mengambil bahagian dengan penuh khusyuk bagi memperoleh keberkatan.
-
-2. Tazkirah Ihya Ramadan
-Sebagai persediaan menyambut Ramadan, satu tazkirah bertemakan "Keistimewaan Ramadan dan Amalan yang Diberkati" telah disampaikan.`;
-
-      document.getElementById('activities').value = `AKTIVITI / PROGRAM TAZKIRAH AWAL RAMADAN
-
-DISIPLIN PELAJAR CEMERLANG
-KELAS KEMAS DAN TERATUR
-KANTIN MURID BERATUR SEMASA MEMBELI MAKANAN
-SURAU KEMAS
-PINTU PAGAR MURID MEMBERI SALAM DAN SENYUM
-LAWATAN TIADA`;
-
-      fillReport();
-      document.getElementById('report').scrollIntoView({behavior:'smooth'});
+    // Overlay toggle: sync values both ways
+    const showOverlayBtn = document.getElementById('showOverlay');
+    const overlayContainer = document.getElementById('overlayContainer');
+    let overlayVisible = false;
+    showOverlayBtn.addEventListener('click', function(){
+      overlayVisible = !overlayVisible;
+      overlayContainer.hidden = !overlayVisible;
+      showOverlayBtn.textContent = overlayVisible ? 'Tutup Overlay' : 'Tunjuk Overlay (Sesuaikan)';
+      if(overlayVisible) syncToOverlay();
     });
 
-    // initial fill
-    fillReport();
+    function syncToOverlay(){
+      // copy main inputs into overlay positioned inputs
+      document.getElementById('abs-school').value = document.getElementById('school').value;
+      document.getElementById('abs-week').value = document.getElementById('week').value;
+      const d = document.getElementById('date').value;
+      document.getElementById('abs-date').value = d ? new Date(d).toLocaleDateString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
+      document.getElementById('abs-day').value = document.getElementById('day').value;
+      document.getElementById('abs-names').value = document.getElementById('names').value.split(',').map(s=>s.trim()).join('\\n');
+      document.getElementById('abs-assembly').value = document.getElementById('assembly').value;
+      document.getElementById('abs-activities').value = document.getElementById('activities').value;
+    }
+
+    // When overlay inputs change, push back to main form and preview
+    ['abs-school','abs-week','abs-date','abs-day','abs-names','abs-assembly','abs-activities'].forEach(id=>{
+      const el = document.getElementById(id);
+      el && el.addEventListener('input', function(){
+        // map back
+        if(id==='abs-school') document.getElementById('school').value = el.value;
+        if(id==='abs-week') document.getElementById('week').value = el.value;
+        if(id==='abs-date') {
+          // don't try to parse; put as text in preview date
+          // keep original date input untouched; preview uses text created below
+        }
+        if(id==='abs-day') document.getElementById('day').value = el.value;
+        if(id==='abs-names') document.getElementById('names').value = el.value.split('\\n').map(s=>s.trim()).join(', ');
+        if(id==='abs-assembly') document.getElementById('assembly').value = el.value;
+        if(id==='abs-activities') document.getElementById('activities').value = el.value;
+        fillReportFromMain();
+      });
+    });
+
+    // Initial fill
+    fillReportFromMain();
   </script>
 </body>
 </html>
