@@ -1,242 +1,191 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Laporan Minggu Bertugas — Borang Isi</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#f5f7fb;--card:#fff;--accent:#0b61d6;--muted:#6b7280;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
-  body{margin:0;background:var(--bg);padding:22px;}
-  .container{max-width:980px;margin:0 auto;}
-  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-  h1{margin:0;font-size:20px;color:#0b2340;}
-  .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(11,34,64,0.06);}
-  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
-  input[type="text"], input[type="date"], textarea, select{
-    width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;font-size:14px;box-sizing:border-box;
-  }
-  textarea{min-height:80px;resize:vertical;}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .actions{display:flex;gap:10px;margin-top:12px;}
-  button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600;}
-  .btn-primary{background:var(--accent);color:white;}
-  .btn-outline{background:white;border:1px solid #cbd5e1;color:var(--accent);}
-  .note{color:var(--muted);font-size:13px;margin-top:8px;}
-
-  /* PREVIEW (paper-like A4) */
-  .preview-wrap{margin-top:18px;display:flex;justify-content:center;}
-  #report{background:white;padding:22px;border-radius:6px;width:794px; /* A4 px @96dpi ~ 794x1123 */ color:#111;box-shadow:0 8px 30px rgba(11,34,64,0.06);}
-  #report h2{text-align:center;margin:0 0 8px 0;}
-  .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px;}
-  section{margin-top:8px;border-top:1px dashed #eee;padding-top:8px;}
-  .section-title{font-weight:700;margin-bottom:6px;}
-  .names-list{white-space:pre-line;}
-
-  /* Optional overlay mode: place inputs on top of image-like layout (for manual fine-tune) */
-  .overlay-frame{position:relative;width:794px;height:1123px;margin:14px auto;border:1px solid #eee;background:white;overflow:hidden;}
-  .pdf-ref{position:absolute;inset:0;opacity:0.12;pointer-events:none;background:#fff url('/mnt/data/Laporan Bertugas MINGGU 2.pdf') center/cover no-repeat;}
-  /* If browser can't use PDF as background you'll still see faint area; we show the link above. */
-
-  /* Example positioned input (tweak top/left/width as needed) */
-  .abs-input{position:absolute;padding:6px;border:1px dashed rgba(11,34,64,0.12);background:rgba(255,255,255,0.9);border-radius:4px;font-size:13px;}
-  /* sample positions (adjust in CSS below if you want pixel-perfect) */
-  #abs-school{top:60px;left:80px;width:580px;height:26px;}
-  #abs-week{top:100px;left:80px;width:180px;height:26px;}
-  #abs-date{top:100px;left:420px;width:240px;height:26px;}
-  #abs-day{top:140px;left:80px;width:200px;height:26px;}
-  #abs-names{top:180px;left:80px;width:580px;height:60px;}
-  #abs-assembly{top:260px;left:42px;width:710px;height:220px;}
-  #abs-activities{top:500px;left:42px;width:710px;height:220px;}
-
-  @media print{.no-print{display:none}}
-</style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Laporan Minggu Bertugas — Borang Isi</h1>
-      <div style="text-align:right;color:var(--muted);font-size:13px;">
-        Contoh PDF: <a href="/mnt/data/Laporan Bertugas MINGGU 2.pdf" target="_blank">Laporan Bertugas MINGGU 2.pdf</a>
-      </div>
-    </header>
-
-    <div class="card no-print">
-      <div class="grid">
-        <div>
-          <label>Sekolah</label>
-          <input id="school" type="text" placeholder="Isi nama sekolah">
-        </div>
-        <div>
-          <label>Minggu</label>
-          <input id="week" type="text" placeholder="contoh: MINGGU 2">
-        </div>
-        <div>
-          <label>Tarikh</label>
-          <input id="date" type="date">
-        </div>
-        <div>
-          <label>Hari</label>
-          <input id="day" type="text" placeholder="contoh: JUMAAT">
-        </div>
-        <div style="grid-column:1/3;">
-          <label>Nama Guru Bertugas (pisahkan dengan koma)</label>
-          <input id="names" type="text" placeholder="Contoh: SAL SABILA, AJRINA, AFIQAH">
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
-        <div>
-          <label>Perhimpunan Pagi</label>
-          <textarea id="assembly" placeholder="Isi perhimpunan / tazkirah / catatan"></textarea>
-        </div>
-        <div>
-          <label>Aktiviti / Program & Catatan Disiplin</label>
-          <textarea id="activities" placeholder="Isi aktiviti / catatan"></textarea>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary" id="previewBtn">Preview Laporan</button>
-        <button class="btn-outline" id="downloadBtn">Download PDF</button>
-        <button id="showOverlay" style="margin-left:auto;">Tunjuk Overlay (Sesuaikan)</button>
-      </div>
-      <div class="note">Nota: Jika anda perlukan ketepatan posisi persis pada PDF contoh, gunakan mode <strong>Overlay</strong> — kemudian saya boleh bantu laraskan posisi input (top/left) berdasarkan maklum balas anda.</div>
-    </div>
-
-    <!-- PREVIEW (rendered report that will be exported to PDF) -->
-    <div class="preview-wrap">
-      <div id="report" class="card" aria-live="polite">
-        <h2 id="report-school">SEKOLAH</h2>
-        <div class="meta">
-          <div id="report-week">Minggu</div>
-          <div id="report-date">Tarikh</div>
-        </div>
-
-        <section>
-          <div class="section-title">Hari / Guru Bertugas</div>
-          <div><strong>Hari:</strong> <span id="report-day"></span></div>
-          <div style="margin-top:6px;"><strong>Nama Guru Bertugas:</strong>
-            <div class="names-list" id="report-names"></div>
-          </div>
-        </section>
-
-        <section>
-          <div class="section-title">Perhimpunan Pagi</div>
-          <div id="report-assembly" style="white-space:pre-line;"></div>
-        </section>
-
-        <section>
-          <div class="section-title">Aktiviti / Program & Catatan Disiplin</div>
-          <div id="report-activities" style="white-space:pre-line;"></div>
-        </section>
-
-        <footer style="margin-top:12px;font-size:12px;color:var(--muted);">
-          Laporan dijana menggunakan webapp "Laporan Minggu Bertugas".
-        </footer>
-      </div>
-    </div>
-
-    <!-- OVERLAY FRAME (optional: pindah input tepat atas layout) -->
-    <div style="text-align:center;margin-top:12px;" id="overlayContainer" class="no-print" hidden>
-      <p style="color:var(--muted);font-size:13px;margin-bottom:8px;">Mode Overlay: seret/ubah saiz tidak disokong — gunakan CSS untuk melaraskan kedudukan tepat jika perlu.</p>
-      <div class="overlay-frame card">
-        <!-- Visual low-opacity PDF reference (browser may not preview PDF as background, but link above still works) -->
-        <div class="pdf-ref"></div>
-
-        <!-- ABS positioned inputs (ubah kedudukan dalam CSS di atas untuk precision) -->
-        <input id="abs-school" class="abs-input" type="text" placeholder="Sekolah (posisi)">
-        <input id="abs-week" class="abs-input" type="text" placeholder="Minggu">
-        <input id="abs-date" class="abs-input" type="text" placeholder="Tarikh">
-        <input id="abs-day" class="abs-input" type="text" placeholder="Hari">
-        <textarea id="abs-names" class="abs-input" placeholder="Nama Guru (baris baru dipisah)"></textarea>
-        <textarea id="abs-assembly" class="abs-input" placeholder="Perhimpunan Pagi"></textarea>
-        <textarea id="abs-activities" class="abs-input" placeholder="Aktiviti / Program"></textarea>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- html2pdf CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script>
-    // Fill report from form
-    function fillReportFromMain(){
-      document.getElementById('report-school').textContent = (document.getElementById('school').value || 'SEKOLAH').toUpperCase();
-      document.getElementById('report-week').textContent = (document.getElementById('week').value || '');
-      const dateVal = document.getElementById('date').value;
-      const dateFmt = dateVal ? new Date(dateVal).toLocaleDateString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
-      document.getElementById('report-date').textContent = dateFmt;
-      document.getElementById('report-day').textContent = document.getElementById('day').value || '';
-      const names = document.getElementById('names').value || '';
-      document.getElementById('report-names').textContent = names.split(',').map(s=>s.trim()).join('\\n');
-      document.getElementById('report-assembly').textContent = document.getElementById('assembly').value || '';
-      document.getElementById('report-activities').textContent = document.getElementById('activities').value || '';
-    }
-
-    document.getElementById('previewBtn').addEventListener('click', function(){
-      fillReportFromMain();
-      document.getElementById('report').scrollIntoView({behavior:'smooth'});
-    });
-
-    // Download PDF
-    document.getElementById('downloadBtn').addEventListener('click', function(){
-      fillReportFromMain();
-      const element = document.getElementById('report');
-      const opt = {
-        margin:       [0.4,0.4,0.4,0.4],
-        filename:     (document.getElementById('school').value || 'laporan') + '_' + (document.getElementById('week').value || '') + '.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    });
-
-    // Overlay toggle: sync values both ways
-    const showOverlayBtn = document.getElementById('showOverlay');
-    const overlayContainer = document.getElementById('overlayContainer');
-    let overlayVisible = false;
-    showOverlayBtn.addEventListener('click', function(){
-      overlayVisible = !overlayVisible;
-      overlayContainer.hidden = !overlayVisible;
-      showOverlayBtn.textContent = overlayVisible ? 'Tutup Overlay' : 'Tunjuk Overlay (Sesuaikan)';
-      if(overlayVisible) syncToOverlay();
-    });
-
-    function syncToOverlay(){
-      // copy main inputs into overlay positioned inputs
-      document.getElementById('abs-school').value = document.getElementById('school').value;
-      document.getElementById('abs-week').value = document.getElementById('week').value;
-      const d = document.getElementById('date').value;
-      document.getElementById('abs-date').value = d ? new Date(d).toLocaleDateString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
-      document.getElementById('abs-day').value = document.getElementById('day').value;
-      document.getElementById('abs-names').value = document.getElementById('names').value.split(',').map(s=>s.trim()).join('\\n');
-      document.getElementById('abs-assembly').value = document.getElementById('assembly').value;
-      document.getElementById('abs-activities').value = document.getElementById('activities').value;
-    }
-
-    // When overlay inputs change, push back to main form and preview
-    ['abs-school','abs-week','abs-date','abs-day','abs-names','abs-assembly','abs-activities'].forEach(id=>{
-      const el = document.getElementById(id);
-      el && el.addEventListener('input', function(){
-        // map back
-        if(id==='abs-school') document.getElementById('school').value = el.value;
-        if(id==='abs-week') document.getElementById('week').value = el.value;
-        if(id==='abs-date') {
-          // don't try to parse; put as text in preview date
-          // keep original date input untouched; preview uses text created below
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Guru Bertugas - Sekolah Kebangsaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        .gradient-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
         }
-        if(id==='abs-day') document.getElementById('day').value = el.value;
-        if(id==='abs-names') document.getElementById('names').value = el.value.split('\\n').map(s=>s.trim()).join(', ');
-        if(id==='abs-assembly') document.getElementById('assembly').value = el.value;
-        if(id==='abs-activities') document.getElementById('activities').value = el.value;
-        fillReportFromMain();
-      });
-    });
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
 
-    // Initial fill
-    fillReportFromMain();
-  </script>
+    <div class="gradient-header text-white pb-24 pt-10 px-6 rounded-b-[3rem]">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="bg-white/20 inline-block px-4 py-1 rounded-full text-sm font-semibold mb-4 backdrop-blur-sm">
+                Minggu Persekolahan 34
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-2">Laporan Guru Bertugas</h1>
+            <p class="text-blue-100 text-lg">Sistem Pelaporan & Info Mingguan Sekolah</p>
+            <p class="mt-2 font-medium opacity-90"><i class="far fa-calendar-alt mr-2"></i>24 Nov - 28 Nov 2025</p>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 -mt-16">
+        
+        <div class="flex justify-center mb-8 gap-4">
+            <button onclick="switchTab('info')" id="btn-info" class="bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition transform border-2 border-white ring-2 ring-blue-200">
+                <i class="fas fa-users mr-2"></i>Info & Guru
+            </button>
+            <button onclick="switchTab('laporan')" id="btn-laporan" class="bg-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-700 hover:scale-105 transition transform">
+                <i class="fas fa-edit mr-2"></i>Isi Laporan
+            </button>
+        </div>
+
+        <div id="content-info" class="animate-fade-in">
+            
+            <div class="bg-white rounded-2xl p-6 mb-6 card-shadow border-l-8 border-yellow-400">
+                <h3 class="text-gray-500 text-sm font-bold uppercase tracking-wide mb-1">Tema Minggu Ini</h3>
+                <p class="text-xl font-semibold text-gray-800">"Disiplin Teras Kejayaan Murid"</p>
+            </div>
+
+            <h2 class="text-xl font-bold mb-4 text-gray-700 border-b-2 border-blue-200 pb-2 inline-block">Barisan Pentadbir & Guru Bertugas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Cikgu Ahmad Zaki</p>
+                        <p class="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded inline-block">Ketua Kumpulan</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
+                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 text-xl">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Cikgu Siti Aminah</p>
+                        <p class="text-xs text-gray-500 bg-pink-50 px-2 py-1 rounded inline-block">Laporan Perhimpunan</p>
+                    </div>
+                </div>
+                 <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Cikgu Raju A/L Muthu</p>
+                        <p class="text-xs text-gray-500 bg-green-50 px-2 py-1 rounded inline-block">Laporan Kantin</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-xl">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Ustazah Nurul Huda</p>
+                        <p class="text-xs text-gray-500 bg-purple-50 px-2 py-1 rounded inline-block">Kesihatan & Kebersihan</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 card-shadow mb-10">
+                <h3 class="font-bold text-lg mb-4">Jadual Fokus Mingguan</h3>
+                <ul class="space-y-3">
+                    <li class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600">Isnin</span>
+                        <span class="font-semibold text-blue-600">Perhimpunan Rasmi</span>
+                    </li>
+                    <li class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600">Selasa</span>
+                        <span class="font-semibold text-green-600">Program 1M1S</span>
+                    </li>
+                    <li class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600">Jumaat</span>
+                        <span class="font-semibold text-purple-600">Bacaan Yasin & Moral</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content-laporan" class="hidden animate-fade-in mb-12">
+            <div class="bg-white p-8 rounded-2xl card-shadow">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Borang Laporan Harian</h2>
+                    <p class="text-gray-500">Sila isi maklumat kejadian/aktiviti hari ini.</p>
+                </div>
+                
+                <form onsubmit="event.preventDefault(); alert('Laporan berjaya dihantar! (Ini hanyalah demo)');">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Tarikh</label>
+                        <input type="date" class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Kategori Laporan</label>
+                        <select class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Disiplin & Salah Laku</option>
+                            <option>Kebersihan & Keceriaan</option>
+                            <option>Kantin Sekolah</option>
+                            <option>Perhimpunan</option>
+                            <option>Lain-lain</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Perincian Laporan</label>
+                        <textarea rows="4" placeholder="Tulis laporan ringkas di sini..." class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-bold mb-2">Muat Naik Gambar (Jika ada)</label>
+                        <div class="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center hover:bg-gray-50 cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-sm text-gray-500">Klik untuk pilih gambar</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 transition">
+                        Hantar Laporan
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-6 text-gray-500 text-sm">
+        <p>&copy; 2025 Unit Hal Ehwal Murid (HEM)</p>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            const infoContent = document.getElementById('content-info');
+            const laporanContent = document.getElementById('content-laporan');
+            const btnInfo = document.getElementById('btn-info');
+            const btnLaporan = document.getElementById('btn-laporan');
+
+            if (tab === 'info') {
+                infoContent.classList.remove('hidden');
+                laporanContent.classList.add('hidden');
+                
+                // Update Button Styles
+                btnInfo.classList.add('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200', 'border-white');
+                btnInfo.classList.remove('bg-blue-600', 'text-white');
+                
+                btnLaporan.classList.add('bg-blue-600', 'text-white');
+                btnLaporan.classList.remove('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
+            } else {
+                infoContent.classList.add('hidden');
+                laporanContent.classList.remove('hidden');
+
+                // Update Button Styles
+                btnLaporan.classList.add('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
+                btnLaporan.classList.remove('bg-blue-600', 'text-white');
+
+                btnInfo.classList.add('bg-blue-600', 'text-white');
+                btnInfo.classList.remove('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
+            }
+        }
+    </script>
 </body>
 </html>
