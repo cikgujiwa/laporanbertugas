@@ -3,188 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Guru Bertugas - Sekolah Kebangsaan</title>
+    <title>Sistem Laporan Guru Bertugas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
-        .gradient-header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-        }
-        .card-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+
+        /* CSS KHAS UNTUK PRINT */
+        @media print {
+            body { background-color: white; }
+            #input-section, #btn-print-group { display: none !important; }
+            #report-preview { 
+                display: block !important; 
+                box-shadow: none !important; 
+                border: none !important; 
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            .print-break { page-break-inside: avoid; }
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="p-6 md:p-12">
 
-    <div class="gradient-header text-white pb-24 pt-10 px-6 rounded-b-[3rem]">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="bg-white/20 inline-block px-4 py-1 rounded-full text-sm font-semibold mb-4 backdrop-blur-sm">
-                Minggu Persekolahan 34
+    <div id="input-section" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md border border-gray-200 mb-10">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Isi Maklumat Laporan</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Nama Sekolah</label>
+                <input type="text" id="in_sekolah" class="w-full p-3 border rounded bg-gray-50" value="SK SATU SULTAN ALAM SHAH">
             </div>
-            <h1 class="text-3xl md:text-5xl font-bold mb-2">Laporan Guru Bertugas</h1>
-            <p class="text-blue-100 text-lg">Sistem Pelaporan & Info Mingguan Sekolah</p>
-            <p class="mt-2 font-medium opacity-90"><i class="far fa-calendar-alt mr-2"></i>24 Nov - 28 Nov 2025</p>
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Minggu</label>
+                <input type="text" id="in_minggu" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: MINGGU 36">
+            </div>
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Tarikh</label>
+                <input type="date" id="in_tarikh" class="w-full p-3 border rounded bg-gray-50">
+            </div>
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Hari</label>
+                <select id="in_hari" class="w-full p-3 border rounded bg-gray-50">
+                    <option>Isnin</option>
+                    <option>Selasa</option>
+                    <option>Rabu</option>
+                    <option>Khamis</option>
+                    <option>Jumaat</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 font-semibold mb-2">Nama-nama Bertugas</label>
+            <textarea id="in_nama" class="w-full p-3 border rounded bg-gray-50 h-24" placeholder="Masukkan nama (SAL SABILA, WAN AJRINA, dll...)"></textarea>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">1. PERHIMPUNAN PAGI</label>
+                <textarea id="in_1" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Perhimpunan berjalan lancar..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">2. DISIPLIN PELAJAR</label>
+                <textarea id="in_2" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Tiada kes disiplin dilaporkan..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">3. KELAS</label>
+                <textarea id="in_3" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: PdPc berjalan seperti biasa..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">4. KANTIN</label>
+                <textarea id="in_4" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Kantin bersih dan murid beratur..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">5. SURAU</label>
+                <textarea id="in_5" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Surau dalam keadaan bersih..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">6. PINTU PAGAR</label>
+                <textarea id="in_6" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Kawalan trafik terkawal..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">7. LAWATAN</label>
+                <textarea id="in_7" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Tiada pelawat hari ini..."></textarea>
+            </div>
+            <div>
+                <label class="block text-blue-800 font-bold mb-1">8. AKTIVITI</label>
+                <textarea id="in_8" class="w-full p-3 border rounded bg-gray-50" placeholder="Contoh: Latihan sukan petang..."></textarea>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <button onclick="generateReport()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg flex items-center gap-2">
+                <i class="fas fa-save"></i> Simpan Laporan
+            </button>
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto px-6 -mt-16">
+
+    <div id="preview-container" class="hidden max-w-4xl mx-auto">
         
-        <div class="flex justify-center mb-8 gap-4">
-            <button onclick="switchTab('info')" id="btn-info" class="bg-white text-blue-700 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition transform border-2 border-white ring-2 ring-blue-200">
-                <i class="fas fa-users mr-2"></i>Info & Guru
-            </button>
-            <button onclick="switchTab('laporan')" id="btn-laporan" class="bg-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-700 hover:scale-105 transition transform">
-                <i class="fas fa-edit mr-2"></i>Isi Laporan
-            </button>
+        <div id="btn-print-group" class="flex justify-between items-center mb-4">
+            <h3 class="text-gray-500 font-bold uppercase">Paparan Cetakan</h3>
+            <div>
+                <button onclick="document.getElementById('input-section').scrollIntoView({behavior: 'smooth'})" class="text-blue-600 font-semibold mr-4 hover:underline">
+                    <i class="fas fa-edit"></i> Edit Semula
+                </button>
+                <button onclick="window.print()" class="bg-gray-800 hover:bg-black text-white px-6 py-2 rounded-lg font-bold shadow-lg">
+                    <i class="fas fa-print mr-2"></i> Cetak / PDF
+                </button>
+            </div>
         </div>
 
-        <div id="content-info" class="animate-fade-in">
+        <div id="report-preview" class="bg-white p-12 rounded-xl shadow-2xl min-h-[1000px] border border-gray-200 text-gray-900">
             
-            <div class="bg-white rounded-2xl p-6 mb-6 card-shadow border-l-8 border-yellow-400">
-                <h3 class="text-gray-500 text-sm font-bold uppercase tracking-wide mb-1">Tema Minggu Ini</h3>
-                <p class="text-xl font-semibold text-gray-800">"Disiplin Teras Kejayaan Murid"</p>
+            <div class="text-center mb-8 border-b-2 border-black pb-6">
+                <h1 class="text-2xl font-bold uppercase tracking-wider">Laporan Minggu Bertugas</h1>
             </div>
 
-            <h2 class="text-xl font-bold mb-4 text-gray-700 border-b-2 border-blue-200 pb-2 inline-block">Barisan Pentadbir & Guru Bertugas</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
-                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-gray-800">Cikgu Ahmad Zaki</p>
-                        <p class="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded inline-block">Ketua Kumpulan</p>
-                    </div>
+            <div class="grid grid-cols-2 gap-y-4 gap-x-12 mb-8 text-sm uppercase">
+                <div>
+                    <p class="font-bold text-gray-500 text-xs mb-1">Sekolah</p>
+                    <p class="font-semibold text-lg" id="out_sekolah">-</p>
                 </div>
-                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
-                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 text-xl">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-gray-800">Cikgu Siti Aminah</p>
-                        <p class="text-xs text-gray-500 bg-pink-50 px-2 py-1 rounded inline-block">Laporan Perhimpunan</p>
-                    </div>
+                <div>
+                    <p class="font-bold text-gray-500 text-xs mb-1">Minggu</p>
+                    <p class="font-semibold text-lg" id="out_minggu">-</p>
                 </div>
-                 <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
-                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl">
-                        <i class="fas fa-user-clock"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-gray-800">Cikgu Raju A/L Muthu</p>
-                        <p class="text-xs text-gray-500 bg-green-50 px-2 py-1 rounded inline-block">Laporan Kantin</p>
-                    </div>
+                <div>
+                    <p class="font-bold text-gray-500 text-xs mb-1">Tarikh</p>
+                    <p class="font-semibold text-lg" id="out_tarikh">-</p>
                 </div>
-                <div class="bg-white p-4 rounded-xl flex items-center gap-4 card-shadow">
-                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-xl">
-                        <i class="fas fa-notes-medical"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-gray-800">Ustazah Nurul Huda</p>
-                        <p class="text-xs text-gray-500 bg-purple-50 px-2 py-1 rounded inline-block">Kesihatan & Kebersihan</p>
-                    </div>
+                <div>
+                    <p class="font-bold text-gray-500 text-xs mb-1">Hari</p>
+                    <p class="font-semibold text-lg" id="out_hari">-</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 card-shadow mb-10">
-                <h3 class="font-bold text-lg mb-4">Jadual Fokus Mingguan</h3>
-                <ul class="space-y-3">
-                    <li class="flex justify-between border-b pb-2">
-                        <span class="text-gray-600">Isnin</span>
-                        <span class="font-semibold text-blue-600">Perhimpunan Rasmi</span>
-                    </li>
-                    <li class="flex justify-between border-b pb-2">
-                        <span class="text-gray-600">Selasa</span>
-                        <span class="font-semibold text-green-600">Program 1M1S</span>
-                    </li>
-                    <li class="flex justify-between border-b pb-2">
-                        <span class="text-gray-600">Jumaat</span>
-                        <span class="font-semibold text-purple-600">Bacaan Yasin & Moral</span>
-                    </li>
-                </ul>
+            <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg mb-8">
+                <p class="font-bold text-gray-800 mb-2">Nama-nama Bertugas</p>
+                <p id="out_nama" class="text-gray-700 leading-relaxed uppercase text-sm">-</p>
             </div>
+
+            <div class="space-y-6">
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">1. PERHIMPUNAN PAGI</h3>
+                    <p id="out_1" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">2. DISIPLIN PELAJAR</h3>
+                    <p id="out_2" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">3. KELAS</h3>
+                    <p id="out_3" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">4. KANTIN</h3>
+                    <p id="out_4" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">5. SURAU</h3>
+                    <p id="out_5" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">6. PINTU PAGAR</h3>
+                    <p id="out_6" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">7. LAWATAN</h3>
+                    <p id="out_7" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+                <div class="print-break">
+                    <h3 class="font-bold text-black uppercase mb-1">8. AKTIVITI</h3>
+                    <p id="out_8" class="text-gray-700 text-sm leading-relaxed border-l-4 border-gray-300 pl-4 py-1">-</p>
+                </div>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-gray-300 grid grid-cols-2">
+                <div>
+                    <p class="text-xs text-gray-500 mb-10">Disediakan oleh:</p>
+                    <p class="font-bold text-sm">......................................................</p>
+                    <p class="font-bold text-sm">(KETUA KUMPULAN BERTUGAS)</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-10">Disahkan oleh:</p>
+                    <p class="font-bold text-sm">......................................................</p>
+                    <p class="font-bold text-sm">(GURU BESAR / PK HEM)</p>
+                </div>
+             </div>
+
         </div>
-
-        <div id="content-laporan" class="hidden animate-fade-in mb-12">
-            <div class="bg-white p-8 rounded-2xl card-shadow">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Borang Laporan Harian</h2>
-                    <p class="text-gray-500">Sila isi maklumat kejadian/aktiviti hari ini.</p>
-                </div>
-                
-                <form onsubmit="event.preventDefault(); alert('Laporan berjaya dihantar! (Ini hanyalah demo)');">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Tarikh</label>
-                        <input type="date" class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Kategori Laporan</label>
-                        <select class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>Disiplin & Salah Laku</option>
-                            <option>Kebersihan & Keceriaan</option>
-                            <option>Kantin Sekolah</option>
-                            <option>Perhimpunan</option>
-                            <option>Lain-lain</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Perincian Laporan</label>
-                        <textarea rows="4" placeholder="Tulis laporan ringkas di sini..." class="w-full p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-bold mb-2">Muat Naik Gambar (Jika ada)</label>
-                        <div class="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center hover:bg-gray-50 cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                            <p class="text-sm text-gray-500">Klik untuk pilih gambar</p>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 transition">
-                        Hantar Laporan
-                    </button>
-                </form>
-            </div>
-        </div>
-
     </div>
-
-    <footer class="text-center py-6 text-gray-500 text-sm">
-        <p>&copy; 2025 Unit Hal Ehwal Murid (HEM)</p>
-    </footer>
 
     <script>
-        function switchTab(tab) {
-            const infoContent = document.getElementById('content-info');
-            const laporanContent = document.getElementById('content-laporan');
-            const btnInfo = document.getElementById('btn-info');
-            const btnLaporan = document.getElementById('btn-laporan');
+        function generateReport() {
+            // Ambil data dari input
+            const data = {
+                sekolah: document.getElementById('in_sekolah').value,
+                minggu: document.getElementById('in_minggu').value,
+                tarikh: document.getElementById('in_tarikh').value,
+                hari: document.getElementById('in_hari').value,
+                nama: document.getElementById('in_nama').value,
+                laporan1: document.getElementById('in_1').value || "Tiada laporan.",
+                laporan2: document.getElementById('in_2').value || "Tiada laporan.",
+                laporan3: document.getElementById('in_3').value || "Tiada laporan.",
+                laporan4: document.getElementById('in_4').value || "Tiada laporan.",
+                laporan5: document.getElementById('in_5').value || "Tiada laporan.",
+                laporan6: document.getElementById('in_6').value || "Tiada laporan.",
+                laporan7: document.getElementById('in_7').value || "Tiada laporan.",
+                laporan8: document.getElementById('in_8').value || "Tiada laporan."
+            };
 
-            if (tab === 'info') {
-                infoContent.classList.remove('hidden');
-                laporanContent.classList.add('hidden');
-                
-                // Update Button Styles
-                btnInfo.classList.add('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200', 'border-white');
-                btnInfo.classList.remove('bg-blue-600', 'text-white');
-                
-                btnLaporan.classList.add('bg-blue-600', 'text-white');
-                btnLaporan.classList.remove('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
+            // Masukkan data ke dalam preview
+            document.getElementById('out_sekolah').innerText = data.sekolah;
+            document.getElementById('out_minggu').innerText = data.minggu;
+            
+            // Format tarikh sikit supaya cantik
+            const dateObj = new Date(data.tarikh);
+            if(!isNaN(dateObj)) {
+                document.getElementById('out_tarikh').innerText = dateObj.toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });
             } else {
-                infoContent.classList.add('hidden');
-                laporanContent.classList.remove('hidden');
-
-                // Update Button Styles
-                btnLaporan.classList.add('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
-                btnLaporan.classList.remove('bg-blue-600', 'text-white');
-
-                btnInfo.classList.add('bg-blue-600', 'text-white');
-                btnInfo.classList.remove('bg-white', 'text-blue-700', 'ring-2', 'ring-blue-200');
+                document.getElementById('out_tarikh').innerText = data.tarikh;
             }
+            
+            document.getElementById('out_hari').innerText = data.hari;
+            document.getElementById('out_nama').innerText = data.nama;
+            
+            document.getElementById('out_1').innerText = data.laporan1;
+            document.getElementById('out_2').innerText = data.laporan2;
+            document.getElementById('out_3').innerText = data.laporan3;
+            document.getElementById('out_4').innerText = data.laporan4;
+            document.getElementById('out_5').innerText = data.laporan5;
+            document.getElementById('out_6').innerText = data.laporan6;
+            document.getElementById('out_7').innerText = data.laporan7;
+            document.getElementById('out_8').innerText = data.laporan8;
+
+            // Tunjuk bahagian preview
+            const previewContainer = document.getElementById('preview-container');
+            previewContainer.classList.remove('hidden');
+
+            // Scroll ke bawah supaya nampak hasil
+            previewContainer.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
